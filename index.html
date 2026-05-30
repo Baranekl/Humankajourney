@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damla Yaku & HUMANKA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0805;
+    --bg2: #1a0e08;
+    --bg3: #231208;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: #8a6e30;
+    --cream: #f0e6d0;
+    --cream-dim: #b8a88a;
+    --text: #e8dcc8;
+    --text-dim: #9a8870;
+    --border: rgba(201,168,76,0.18);
+    --border-soft: rgba(201,168,76,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* ── LANG SWITCHER ── */
+  .lang-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 40px;
+    background: rgba(15,8,5,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .lang-bar .logo-nav {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .lang-switch {
+    display: flex;
+    gap: 4px;
+    background: rgba(201,168,76,0.06);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px;
+  }
+
+  .lang-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    padding: 4px 12px;
+    border-radius: 16px;
+    transition: all 0.3s;
+  }
+
+  .lang-btn.active {
+    background: var(--gold);
+    color: var(--bg);
+    font-weight: 400;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 60%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 40%, rgba(139,69,19,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 80% 40%, rgba(139,69,19,0.08) 0%, transparent 60%);
+  }
+
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .hero-tag::before, .hero-tag::after {
+    content: '—';
+    margin: 0 10px;
+    opacity: 0.5;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 9vw, 96px);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    position: relative;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--gold-dim);
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .hero-instruments {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    position: relative;
+    margin-bottom: 60px;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-dim);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: float 2.5s ease-in-out infinite;
+  }
+
+  .hero-scroll::after {
+    content: '';
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 100px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-full {
+    max-width: 100%;
+    padding: 100px 0;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 60px;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 32px;
+  }
+
+  h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border-soft);
+    margin: 0;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--cream-dim);
+    font-size: 16px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  .about-text p:last-child { margin-bottom: 0; }
+
+  /* ── CONCEPTS ── */
+  .concepts-bg {
+    background: var(--bg2);
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 60px;
+  }
+
+  .concept-card {
+    background: var(--bg3);
+    padding: 48px 36px;
+    border: 1px solid var(--border-soft);
+    transition: border-color 0.4s, background 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .concept-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .concept-card:hover::before { transform: scaleX(1); }
+  .concept-card:hover { border-color: var(--border); }
+
+  .concept-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .concept-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .concept-card p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  .concept-duration {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gold-dim);
+    margin-top: 20px;
+  }
+
+  /* ── MEMBERS ── */
+  .members-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-top: 60px;
+  }
+
+  .member-card {
+    position: relative;
+  }
+
+  .member-photo {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--bg3);
+    border: 1px solid var(--border-soft);
+    margin-bottom: 24px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .member-photo-placeholder {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 300;
+    color: var(--border);
+    font-style: italic;
+  }
+
+  .member-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--bg3) 0%, transparent 40%);
+  }
+
+  .member-role {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 8px;
+  }
+
+  .member-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 14px;
+  }
+
+  .member-bio {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  .member-handle {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--gold-dim);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+
+  .member-handle:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* ── SHOWS ── */
+  .shows-bg {
+    background: var(--bg2);
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .shows-list {
+    margin-top: 48px;
+  }
+
+  .show-item {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    align-items: center;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border-soft);
+    transition: background 0.3s;
+  }
+
+  .show-item:first-child { border-top: 1px solid var(--border-soft); }
+
+  .show-date {
+    text-align: center;
+  }
+
+  .show-date .day {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .show-date .month {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .show-info h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .show-info .venue {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .show-info .venue span {
+    color: var(--gold-dim);
+    margin-right: 6px;
+  }
+
+  .show-tag {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    white-space: nowrap;
+  }
+
+  .shows-empty {
+    padding: 60px 0;
+    text-align: center;
+    color: var(--text-dim);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+  }
+
+  /* ── REPERTOIRE ── */
+  .repertoire-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-top: 48px;
+  }
+
+  .repertoire-block h4 {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 20px;
+  }
+
+  .track-item {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .track-item:first-of-type { border-top: 1px solid var(--border-soft); }
+
+  .track-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--cream);
+  }
+
+  .track-artist {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .yt-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 12px 24px;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .yt-link:hover {
+    background: rgba(201,168,76,0.08);
+    border-color: var(--gold-dim);
+  }
+
+  .yt-link::after { content: '↗'; }
+
+  /* ── CONTACT ── */
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .contact-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream-dim);
+    line-height: 1.4;
+    margin-bottom: 0;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .contact-link-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border: 1px solid var(--border-soft);
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
+  }
+
+  .contact-link-item:hover {
+    border-color: var(--border);
+    color: var(--cream);
+    background: var(--bg3);
+  }
+
+  .contact-link-item .c-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    min-width: 80px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 48px 40px;
+    border-top: 1px solid var(--border-soft);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+  }
+
+  footer .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--gold-dim);
+    letter-spacing: 0.15em;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  /* ── LANG TOGGLE ── */
+  [data-lang="en"] { display: none; }
+  body.lang-en [data-lang="tr"] { display: none; }
+  body.lang-en [data-lang="en"] { display: block; }
+  body.lang-en [data-lang="en"].inline { display: inline; }
+  .inline { display: inline; }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .lang-bar { padding: 12px 20px; }
+    .nav-links { display: none; }
+    section { padding: 70px 24px; }
+    .about-grid,
+    .concepts-grid,
+    .members-grid,
+    .repertoire-grid,
+    .contact-inner { grid-template-columns: 1fr; gap: 32px; }
+    .show-item { grid-template-columns: 70px 1fr; }
+    .show-tag { display: none; }
+  }
+</style>
+</head>
+<body class="lang-tr">
+
+<!-- NAV -->
+<nav class="lang-bar">
+  <a href="#hero" class="logo-nav">HUMANKA</a>
+  <ul class="nav-links">
+    <li><a href="#about" data-lang="tr">Hakkımızda</a><a href="#about" data-lang="en">About</a></li>
+    <li><a href="#concepts" data-lang="tr">Konseptler</a><a href="#concepts" data-lang="en">Concepts</a></li>
+    <li><a href="#members" data-lang="tr">Üyeler</a><a href="#members" data-lang="en">Members</a></li>
+    <li><a href="#shows" data-lang="tr">Konserler</a><a href="#shows" data-lang="en">Shows</a></li>
+    <li><a href="#contact" data-lang="tr">İletişim</a><a href="#contact" data-lang="en">Contact</a></li>
+  </ul>
+  <div class="lang-switch">
+    <button class="lang-btn active" onclick="setLang('tr')">TR</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero" style="max-width:100%; padding-left:40px; padding-right:40px;">
+  <div class="hero-tag" data-lang="tr">Ses Yolculuğu & Sahne Sanatı</div>
+  <div class="hero-tag" data-lang="en">Sound Journey & Stage Art</div>
+
+  <h1>Damla Yaku<br><span>& HUMANKA</span></h1>
+
+  <p class="hero-sub" data-lang="tr">Doğu'nun kadim tınısı, çağdaş bir çerçevede</p>
+  <p class="hero-sub" data-lang="en">The ancient resonance of the East, reframed</p>
+
+  <p class="hero-instruments">Vocal · Kanun · Handpan · Live Electronics · Gong · Tibetan Bowls</p>
+
+  <a href="#about" class="hero-scroll">
+    <span data-lang="tr">keşfet</span>
+    <span data-lang="en">explore</span>
+  </a>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about" class="fade-up">
+  <div class="section-label" data-lang="tr">Hakkımızda</div>
+  <div class="section-label" data-lang="en">About Us</div>
+
+  <div class="about-grid">
+    <div>
+      <h2 data-lang="tr">Mistik. Şifalı.<br><em>Doğaçlama.</em></h2>
+      <h2 data-lang="en">Mystical. Healing.<br><em>Improvisational.</em></h2>
+    </div>
+    <div class="about-text">
+      <p data-lang="tr">HUMANKA, kanun, handpan, vokal ve perküsyon gibi enstrümanların özgün bir araya gelişiyle mistik, şifalı ve doğaçlama odaklı müzik deneyimleri sunan bir topluluktur.</p>
+      <p data-lang="en">HUMANKA is a collective offering mystical, healing-oriented, and improvisational musical experiences through an original blend of qanun, handpan, vocal, and percussion.</p>
+      <p data-lang="tr">Repertuarımız Anadolu ve Ortadoğu müzik geleneklerinden beslenirken çağdaş ses meditasyonu yaklaşımlarıyla buluşur.</p>
+      <p data-lang="en">Our repertoire draws from Anatolian and Middle Eastern musical traditions while meeting contemporary sound meditation approaches.</p>
+      <p style="font-size:13px; color: var(--text-dim); margin-top:8px;">Turkey · Europe · Far East</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONCEPTS -->
+<div class="concepts-bg">
+  <section id="concepts" class="fade-up">
+    <div class="section-label" data-lang="tr">Konseptler</div>
+    <div class="section-label" data-lang="en">Concepts</div>
+
+    <div class="concepts-grid">
+      <div class="concept-card">
+        <div class="concept-num">01</div>
+        <h3 data-lang="tr">Sema Şarkıları & Semah Alanı</h3>
+        <h3 data-lang="en">Sema Songs & Semah Space</h3>
+        <p data-lang="tr">İlahi, deyiş ve sema; meditasyon ve hareket için bir atmosfer.</p>
+        <p data-lang="en">Ilahi, deyis and sema; an atmosphere for meditation and movement.</p>
+        <div class="concept-duration">90 – 120 min</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-num">02</div>
+        <h3>Cacao Ecstatic Dance Set</h3>
+        <p data-lang="tr">Canlı miks ile dinamik ses deneyimi — kakao ve ecstatic dance için.</p>
+        <p data-lang="en">Dynamic sonic experience via live mix — for cacao & ecstatic dance.</p>
+        <div class="concept-duration">90 – 120 min</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-num">03</div>
+        <h3 data-lang="tr">Canlı Sahne</h3>
+        <h3 data-lang="en">Live Stage</h3>
+        <p data-lang="tr">Kendi besteler, doğaçlama ve uluslararası repertuar.</p>
+        <p data-lang="en">Original compositions, improvisation and international repertoire.</p>
+        <div class="concept-duration">90 – 120 min</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- MEMBERS -->
+<section id="members" class="fade-up">
+  <div class="section-label" data-lang="tr">Üyeler</div>
+  <div class="section-label" data-lang="en">Members</div>
+
+  <div class="members-grid">
+    <!-- Damla -->
+    <div class="member-card">
+      <div class="member-photo">
+        <span class="member-photo-placeholder">DY</span>
+      </div>
+      <div class="member-role" data-lang="tr">Vokal & Söz Yazarı</div>
+      <div class="member-role" data-lang="en">Vocalist & Songwriter</div>
+      <h3>Damla Yaku</h3>
+      <p class="member-bio" data-lang="tr">Müziğini elementsel ses, duygu ve ruhsal derinlikle harmanlayan Türk bir şarkıcı ve söz yazarıdır. İyileştirme sanatları ve su terapisi üzerine yaptığı çalışmalardan beslenen sesi, dinleyicileri varoluşa taşır.</p>
+      <p class="member-bio" data-lang="en">A Turkish singer and songwriter whose music blends elemental sound, emotion, and spiritual depth. Rooted in healing arts and water therapy, her voice guides listeners into presence and remembrance.</p>
+      <a class="member-handle" href="https://instagram.com/damlaninpatikasi" target="_blank">@damlaninpatikasi</a>
+    </div>
+
+    <!-- Baran -->
+    <div class="member-card">
+      <div class="member-photo">
+        <span class="member-photo-placeholder">BE</span>
+      </div>
+      <div class="member-role" data-lang="tr">Kanun & Müzik Prodüktörü</div>
+      <div class="member-role" data-lang="en">Kanun & Music Producer</div>
+      <h3>Baran Eskili</h3>
+      <p class="member-bio" data-lang="tr">Sekiz yaşında kanunla başladığı müzik yolculuğunda geleneksel icrayı elektronik prodüksiyonla harmanlayan Baran, Doğu'nun kadim tınısını çağdaş bir çerçevede yeniden yorumluyor.</p>
+      <p class="member-bio" data-lang="en">Beginning with the qanun at eight, Baran developed a distinctive sonic language blending traditional performance with electronic production. He reinterprets the ancient resonance of the East within a contemporary framework.</p>
+      <a class="member-handle" href="https://instagram.com/baraneskili" target="_blank">@baraneskili</a>
+    </div>
+
+    <!-- Kaan -->
+    <div class="member-card">
+      <div class="member-photo">
+        <span class="member-photo-placeholder">KH</span>
+      </div>
+      <div class="member-role" data-lang="tr">Handpan & Ses Yolculuğu</div>
+      <div class="member-role" data-lang="en">Handpan & Sound Journey</div>
+      <h3>Kaan Hantal</h3>
+      <p class="member-bio" data-lang="tr">2016'da kurumsal dünyayı geride bırakarak titreşim tıbbına adım atan Kaan, 2020'den bu yana gong ve Tibet kaseleriyle dünya genelinde ses yolculukları yönetiyor.</p>
+      <p class="member-bio" data-lang="en">Leaving the corporate world in 2016, Kaan transitioned into vibrational medicine. Since 2020, he leads sound journeys worldwide with gongs and Tibetan bowls. Founder of Khan Instruments.</p>
+      <a class="member-handle" href="https://instagram.com/kaanhantal" target="_blank">@kaanhantal</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SHOWS -->
+<!-- ════════════════════════════════════════════════════
+     KONSER TARİHLERİ — BURAYA EKLE / BURADAN SİL
+     Her konser için aşağıdaki bloğu kopyala:
+
+     <div class="show-item">
+       <div class="show-date">
+         <div class="day">15</div>
+         <div class="month" data-lang="tr">Tem 2025</div>
+         <div class="month" data-lang="en">Jul 2025</div>
+       </div>
+       <div class="show-info">
+         <h4>Mekan Adı</h4>
+         <p class="venue"><span>📍</span>Şehir, Ülke</p>
+       </div>
+       <div class="show-tag" data-lang="tr">Ses Yolculuğu</div>
+       <div class="show-tag" data-lang="en">Sound Journey</div>
+     </div>
+
+     ════════════════════════════════════════════════════ -->
+<div class="shows-bg">
+  <section id="shows" class="fade-up">
+    <div class="section-label" data-lang="tr">Yaklaşan Konserler</div>
+    <div class="section-label" data-lang="en">Upcoming Shows</div>
+    <h2 data-lang="tr">Bizi <em>Canlı</em> İzleyin</h2>
+    <h2 data-lang="en">See Us <em>Live</em></h2>
+
+    <div class="shows-list" id="shows-list">
+
+      <!-- ÖRNEK / EXAMPLE — silebilirsin -->
+      <div class="show-item">
+        <div class="show-date">
+          <div class="day">—</div>
+          <div class="month" data-lang="tr">Yakında</div>
+          <div class="month" data-lang="en">Soon</div>
+        </div>
+        <div class="show-info">
+          <h4 data-lang="tr">Tarihler yakında açıklanacak</h4>
+          <h4 data-lang="en">Dates to be announced</h4>
+          <p class="venue"><span>◎</span><span data-lang="tr">Takipte kalın · @humankajourney</span><span data-lang="en">Stay tuned · @humankajourney</span></p>
+        </div>
+        <div class="show-tag" data-lang="tr">TBA</div>
+        <div class="show-tag" data-lang="en">TBA</div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- REPERTOIRE -->
+<section id="repertoire" class="fade-up">
+  <div class="section-label" data-lang="tr">Repertuar</div>
+  <div class="section-label" data-lang="en">Repertoire</div>
+  <h2 data-lang="tr"><em>Özgün</em> Eserler</h2>
+  <h2 data-lang="en"><em>Original</em> Works</h2>
+
+  <div class="repertoire-grid">
+    <div class="repertoire-block">
+      <h4 data-lang="tr">Özgün Eserler / Original Works</h4>
+      <div class="track-item">
+        <span class="track-name">Ey Aşk</span>
+        <span class="track-artist">Damla Yaku</span>
+      </div>
+      <div class="track-item">
+        <span class="track-name">Breeze</span>
+        <span class="track-artist">Baran Eskili & Kaan Hantal</span>
+      </div>
+    </div>
+    <div class="repertoire-block">
+      <h4 data-lang="tr">Doğaçlama / Improvisation</h4>
+      <p data-lang="tr" style="font-size:14px; color: var(--text-dim); line-height:1.8; margin-bottom:24px;">Repertuar konsepte göre değişebilir. Anka videomuz bir doğaçlama konser örneğidir.</p>
+      <p data-lang="en" style="font-size:14px; color: var(--text-dim); line-height:1.8; margin-bottom:24px;">Repertoire adapts to the concept. Our Anka video is an example of an improvisational set.</p>
+      <a class="yt-link" href="https://youtube.com/@HumankaJourney" target="_blank">
+        YouTube — Anka (live set)&nbsp;
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact" class="fade-up">
+  <div class="section-label" data-lang="tr">İletişim</div>
+  <div class="section-label" data-lang="en">Contact</div>
+
+  <div class="contact-inner">
+    <div>
+      <p class="contact-tagline" data-lang="tr">"Sesin iyileştirici gücüyle buluşmaya davet ediyoruz."</p>
+      <p class="contact-tagline" data-lang="en">"We invite you to meet the healing power of sound."</p>
+    </div>
+    <div class="contact-links">
+      <a class="contact-link-item" href="mailto:humankajourney@gmail.com">
+        <span class="c-label">Email</span>
+        humankajourney@gmail.com
+      </a>
+      <a class="contact-link-item" href="https://youtube.com/@HumankaJourney" target="_blank">
+        <span class="c-label">YouTube</span>
+        @humankajourney
+      </a>
+      <a class="contact-link-item" href="https://instagram.com/humankajourney" target="_blank">
+        <span class="c-label">Instagram</span>
+        @humankajourney
+      </a>
+      <a class="contact-link-item" href="https://humankajourney.com" target="_blank">
+        <span class="c-label">Web</span>
+        humankajourney.com
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">HUMANKA</span>
+  Turkey · Europe · Far East
+  <br><br>
+  © 2025 Damla Yaku & HUMANKA · humankajourney@gmail.com
+</footer>
+
+<script>
+function setLang(lang) {
+  document.body.classList.remove('lang-tr', 'lang-en');
+  document.body.classList.add('lang-' + lang);
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === lang);
+  });
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
