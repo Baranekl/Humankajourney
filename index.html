@@ -125,7 +125,7 @@
     inset: 0;
     background-image:
       linear-gradient(to bottom, rgba(15,8,5,0.55) 0%, rgba(15,8,5,0.35) 35%, rgba(15,8,5,0.75) 100%),
-      url('hero.jpg');
+      url('group.jpg');
     background-size: cover;
     background-position: center 30%;
   }
@@ -530,6 +530,72 @@
   .gallery-item.tall { grid-row: span 2; }
   .gallery-item.big { grid-column: span 2; grid-row: span 2; }
 
+  /* ── LIGHTBOX ── */
+  .lightbox-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(10,5,3,0.96);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .lightbox-overlay.active { display: flex; }
+
+  .lightbox-img {
+    max-width: 90vw;
+    max-height: 80vh;
+    object-fit: contain;
+    border: 1px solid var(--border-soft);
+    user-select: none;
+  }
+
+  .lightbox-controls {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-top: 24px;
+  }
+
+  .lightbox-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--gold);
+    font-size: 20px;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .lightbox-btn:hover { background: rgba(201,168,76,0.1); }
+
+  .lightbox-counter {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    background: none;
+    border: none;
+    color: var(--gold-dim);
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .lightbox-close:hover { color: var(--gold); }
+
+  .gallery-item { cursor: pointer; }
+
   .gallery-caption {
     margin-top: 28px;
     text-align: center;
@@ -777,7 +843,7 @@
     </div>
   </div>
   <div style="margin-top:60px; overflow:hidden; border:1px solid var(--border-soft);">
-    <img src="group.jpg" alt="HUMANKA live at Dragon Tea Temple, Bali" loading="lazy" style="width:100%; display:block; filter:saturate(0.97);">
+    <img src="about.jpg" alt="HUMANKA live at Dragon Tea Temple, Bali" loading="lazy" style="width:100%; display:block; filter:saturate(0.97);">
   </div>
 </section>
 
@@ -899,15 +965,16 @@
     <p data-lang="en" style="color:var(--cream-dim); max-width:640px; margin-top:-12px;">Our debut concert — and one of the most well-attended shows hosted at Dragon Tea Temple at the time. Indonesia.</p>
 
     <div class="gallery-grid">
-      <div class="gallery-item big"><img src="gallery1.jpg" alt="HUMANKA Dragon Tea Temple Bali" loading="lazy"></div>
-      <div class="gallery-item tall"><img src="artist-damla.jpg" alt="Sound journey performance" loading="lazy"></div>
-      <div class="gallery-item"><img src="gallery4.jpg" alt="Audience" loading="lazy"></div>
-      <div class="gallery-item"><img src="gallery2.jpg" alt="Performance" loading="lazy"></div>
-      <div class="gallery-item wide"><img src="gallery3.jpg" alt="Dance performance" loading="lazy"></div>
-      <div class="gallery-item"><img src="gallery6.jpg" alt="Ecstatic dance" loading="lazy"></div>
-      <div class="gallery-item wide"><img src="gallery5.jpg" alt="Ecstatic dance crowd" loading="lazy"></div>
-      <div class="gallery-item"><img src="gallery7.jpg" alt="Dancing" loading="lazy"></div>
-      <div class="gallery-item"><img src="crowd.jpg" alt="Audience watching" loading="lazy"></div>
+      <div class="gallery-item big" onclick="openLightbox(0)"><img src="gallery1.jpg" alt="HUMANKA Dragon Tea Temple Bali" loading="lazy"></div>
+      <div class="gallery-item tall" onclick="openLightbox(1)"><img src="artist-damla.jpg" alt="Sound journey performance" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(2)"><img src="gallery4.jpg" alt="Audience" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(3)"><img src="gallery2.jpg" alt="Performance" loading="lazy"></div>
+      <div class="gallery-item wide" onclick="openLightbox(4)"><img src="gallery8.jpg" alt="Stage through trees" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(5)"><img src="gallery3.jpg" alt="Dance performance" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(6)"><img src="gallery6.jpg" alt="Ecstatic dance" loading="lazy"></div>
+      <div class="gallery-item wide" onclick="openLightbox(7)"><img src="gallery5.jpg" alt="Ecstatic dance crowd" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(8)"><img src="gallery7.jpg" alt="Dancing" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(9)"><img src="crowd.jpg" alt="Audience watching" loading="lazy"></div>
     </div>
 
     <p class="gallery-caption" data-lang="tr">Wind of Anatolia · Dragon Tea Temple, Bali · Endonezya</p>
@@ -998,6 +1065,16 @@
   <br><br>
   © 2025 HUMANKA · humankajourney@gmail.com
 </footer>
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightboxOnBg(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  <div class="lightbox-controls">
+    <button class="lightbox-btn" onclick="prevPhoto()">‹</button>
+    <span class="lightbox-counter" id="lightbox-counter">1 / 10</span>
+    <button class="lightbox-btn" onclick="nextPhoto()">›</button>
+  </div>
+</div>
 
 <script>
 function setLang(lang) {
@@ -1011,8 +1088,53 @@ function setLang(lang) {
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
 }, { threshold: 0.1 });
-
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Lightbox
+const galleryImages = [
+  'gallery1.jpg','artist-damla.jpg','gallery4.jpg','gallery2.jpg',
+  'gallery8.jpg','gallery3.jpg','gallery6.jpg','gallery5.jpg','gallery7.jpg','crowd.jpg'
+];
+let currentIndex = 0;
+
+function openLightbox(index) {
+  currentIndex = index;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function closeLightboxOnBg(e) {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+}
+
+function updateLightbox() {
+  document.getElementById('lightbox-img').src = galleryImages[currentIndex];
+  document.getElementById('lightbox-counter').textContent = (currentIndex + 1) + ' / ' + galleryImages.length;
+}
+
+function nextPhoto() {
+  currentIndex = (currentIndex + 1) % galleryImages.length;
+  updateLightbox();
+}
+
+function prevPhoto() {
+  currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+  updateLightbox();
+}
+
+// Klavye desteği
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('active')) return;
+  if (e.key === 'ArrowRight') nextPhoto();
+  if (e.key === 'ArrowLeft') prevPhoto();
+  if (e.key === 'Escape') closeLightbox();
+});
 </script>
 </body>
 </html>
