@@ -1110,8 +1110,25 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
 // Google Calendar otomatik konser yükleme
 const CALENDAR_ID = '97de33b98c32184e07eff21fbdc01d2fe97bf46bad847a26bd148215db1335f6@group.calendar.google.com';
-const PROXY = 'https://api.allorigins.win/get?url=';
 const ICAL_URL = `https://calendar.google.com/calendar/ical/${encodeURIComponent(CALENDAR_ID)}/public/basic.ics`;
+
+async function fetchWithProxy(url) {
+  const proxies = [
+    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+    `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+  ];
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy);
+      if (!res.ok) continue;
+      const data = await res.json();
+      const text = data.contents || data;
+      if (typeof text === 'string' && text.includes('BEGIN:VCALENDAR')) return text;
+    } catch(e) { continue; }
+  }
+  return null;
+}
 
 const TR_MONTHS = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
 const EN_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1163,9 +1180,9 @@ function formatDateEN(start, end) {
 async function loadShows() {
   const list = document.getElementById('shows-list');
   try {
-    const res = await fetch(PROXY + encodeURIComponent(ICAL_URL));
-    const data = await res.json();
-    const events = parseICS(data.contents);
+    const icsText = await fetchWithProxy(ICAL_URL);
+    if (!icsText) throw new Error('No data');
+    const events = parseICS(icsText);
     const now = new Date();
     const upcoming = events.filter(e => e.end >= now);
 
