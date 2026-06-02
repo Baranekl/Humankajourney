@@ -1105,6 +1105,9 @@ function setLang(lang) {
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
 }, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
 // Google Calendar otomatik konser yükleme
 const CALENDAR_ID = '97de33b98c32184e07eff21fbdc01d2fe97bf46bad847a26bd148215db1335f6@group.calendar.google.com';
 const PROXY = 'https://api.allorigins.win/get?url=';
