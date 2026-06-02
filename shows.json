@@ -1,0 +1,58 @@
+[
+  {
+    "date": "2026-06-04",
+    "dateEnd": "2026-06-04",
+    "title": "The Yoga Ritual İnzivası",
+    "venue": "Stoa Şirince",
+    "city": "İzmir, Türkiye",
+    "type": "İnziva"
+  },
+  {
+    "date": "2026-06-13",
+    "dateEnd": "2026-06-13",
+    "title": "Özel Etkinlik",
+    "venue": "Radisson Blu Tuzla",
+    "city": "İstanbul, Türkiye",
+    "type": "Özel"
+  },
+  {
+    "date": "2026-06-20",
+    "dateEnd": "2026-06-20",
+    "title": "Shambala",
+    "venue": "Shambala",
+    "city": "Türkiye",
+    "type": "Konser"
+  },
+  {
+    "date": "2026-07-02",
+    "dateEnd": "2026-07-05",
+    "title": "Bonjuk Bay",
+    "venue": "Bonjuk Bay",
+    "city": "Marmaris, Türkiye",
+    "type": "Festival"
+  },
+  {
+    "date": "2026-07-13",
+    "dateEnd": "2026-07-16",
+    "title": "Alaçatı İnzivası",
+    "venue": "Alaçatı",
+    "city": "İzmir, Türkiye",
+    "type": "İnziva"
+  },
+  {
+    "date": "2026-08-06",
+    "dateEnd": "2026-08-09",
+    "title": "Aquart Festival",
+    "venue": "Aquart Festival",
+    "city": "Türkiye",
+    "type": "Festival"
+  },
+  {
+    "date": "2026-09-04",
+    "dateEnd": "2026-09-06",
+    "title": "Kut Spirit Festival",
+    "venue": "Kut Spirit Festival",
+    "city": "Türkiye",
+    "type": "Festival"
+  }
+]
