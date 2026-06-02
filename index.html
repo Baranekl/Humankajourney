@@ -956,11 +956,26 @@
   </section>
 </div>
 
-<!-- SHOWS / KONSERLER -->
+<!-- UPCOMING SHOWS - Google Calendar otomatik -->
 <div class="shows-bg">
   <section id="shows" class="fade-up">
-    <div class="section-label" data-lang="tr">Konserler</div>
-    <div class="section-label" data-lang="en">Shows</div>
+    <div class="section-label" data-lang="tr">Yaklaşan Konserler</div>
+    <div class="section-label" data-lang="en">Upcoming Shows</div>
+    <h2 data-lang="tr">Bizi <em>Canlı</em> İzleyin</h2>
+    <h2 data-lang="en">See Us <em>Live</em></h2>
+
+    <div class="shows-list" id="shows-list">
+      <div style="padding:40px 0; color:var(--text-dim); font-size:14px; letter-spacing:0.1em;" data-lang="tr">Yükleniyor…</div>
+      <div style="padding:40px 0; color:var(--text-dim); font-size:14px; letter-spacing:0.1em;" data-lang="en">Loading…</div>
+    </div>
+  </section>
+</div>
+
+<!-- PAST SHOWS / KONSERLER -->
+<div class="shows-bg" style="border-top:none;">
+  <section class="fade-up" style="padding-top:0;">
+    <div class="section-label" data-lang="tr">Geçmiş Konserler</div>
+    <div class="section-label" data-lang="en">Past Shows</div>
     <h2 data-lang="tr">Dragon Tea Temple <em>Bali</em></h2>
     <h2 data-lang="en">Dragon Tea Temple <em>Bali</em></h2>
     <p data-lang="tr" style="color:var(--cream-dim); max-width:640px; margin-top:-12px;">İlk konserimiz olmasına rağmen Dragon Tea Temple'ın o dönemki en kalabalık konserlerinden biri oldu — Endonezya.</p>
@@ -1090,7 +1105,101 @@ function setLang(lang) {
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
 }, { threshold: 0.1 });
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+// Google Calendar otomatik konser yükleme
+const CALENDAR_ID = '97de33b98c32184e07eff21fbdc01d2fe97bf46bad847a26bd148215db1335f6@group.calendar.google.com';
+const PROXY = 'https://api.allorigins.win/get?url=';
+const ICAL_URL = `https://calendar.google.com/calendar/ical/${encodeURIComponent(CALENDAR_ID)}/public/basic.ics`;
+
+const TR_MONTHS = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+const EN_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function parseICS(ics) {
+  const events = [];
+  const blocks = ics.split('BEGIN:VEVENT');
+  blocks.shift();
+  for (const block of blocks) {
+    const get = (key) => {
+      const m = block.match(new RegExp(key + '[^:]*:([^\\r\\n]+)'));
+      return m ? m[1].trim() : '';
+    };
+    const summary = get('SUMMARY');
+    const location = get('LOCATION');
+    const dtstart = get('DTSTART');
+    const dtend = get('DTEND');
+    if (!summary || !dtstart) continue;
+
+    const parseDate = (d) => {
+      if (d.length === 8) return new Date(+d.slice(0,4), +d.slice(4,6)-1, +d.slice(6,8));
+      return new Date(d.slice(0,4), +d.slice(4,6)-1, +d.slice(6,8),
+        +d.slice(9,11)||0, +d.slice(11,13)||0);
+    };
+
+    const start = parseDate(dtstart.replace(/T.*Z?$/,'').replace(/[TZ]/g,''));
+    const end = dtend ? parseDate(dtend.replace(/T.*Z?$/,'').replace(/[TZ]/g,'')) : start;
+    events.push({ summary, location, start, end });
+  }
+  return events.sort((a,b) => a.start - b.start);
+}
+
+function formatDateTR(start, end) {
+  const s = start, e = end;
+  const sameDay = s.toDateString() === e.toDateString();
+  if (sameDay) return `${s.getDate()} ${TR_MONTHS[s.getMonth()]} ${s.getFullYear()}`;
+  if (s.getMonth() === e.getMonth()) return `${s.getDate()}–${e.getDate()} ${TR_MONTHS[s.getMonth()]} ${s.getFullYear()}`;
+  return `${s.getDate()} ${TR_MONTHS[s.getMonth()]} – ${e.getDate()} ${TR_MONTHS[e.getMonth()]} ${e.getFullYear()}`;
+}
+
+function formatDateEN(start, end) {
+  const s = start, e = end;
+  const sameDay = s.toDateString() === e.toDateString();
+  if (sameDay) return `${EN_MONTHS[s.getMonth()]} ${s.getDate()}, ${s.getFullYear()}`;
+  if (s.getMonth() === e.getMonth()) return `${EN_MONTHS[s.getMonth()]} ${s.getDate()}–${e.getDate()}, ${e.getFullYear()}`;
+  return `${EN_MONTHS[s.getMonth()]} ${s.getDate()} – ${EN_MONTHS[e.getMonth()]} ${e.getDate()}, ${e.getFullYear()}`;
+}
+
+async function loadShows() {
+  const list = document.getElementById('shows-list');
+  try {
+    const res = await fetch(PROXY + encodeURIComponent(ICAL_URL));
+    const data = await res.json();
+    const events = parseICS(data.contents);
+    const now = new Date();
+    const upcoming = events.filter(e => e.end >= now);
+
+    if (upcoming.length === 0) {
+      list.innerHTML = `
+        <div class="shows-empty" data-lang="tr">Yakında yeni tarihler duyurulacak · @humankajourney</div>
+        <div class="shows-empty" data-lang="en">New dates coming soon · @humankajourney</div>`;
+      return;
+    }
+
+    list.innerHTML = upcoming.map(ev => {
+      const name = ev.summary.replace(/^HUMANKA\s*[—–-]\s*/i, '');
+      const loc = ev.location ? ev.location.split(',')[0] : '';
+      const city = ev.location ? ev.location.split(',').slice(1,3).join(',').trim() : '';
+      return `
+      <div class="show-item">
+        <div class="show-date">
+          <div class="day">${ev.start.getDate()}</div>
+          <div class="month" data-lang="tr">${TR_MONTHS[ev.start.getMonth()]} ${ev.start.getFullYear()}</div>
+          <div class="month" data-lang="en">${EN_MONTHS[ev.start.getMonth()]} ${ev.start.getFullYear()}</div>
+        </div>
+        <div class="show-info">
+          <h4>${name}</h4>
+          <p class="venue"><span>📍</span>${loc}${city ? ' · ' + city : ''}</p>
+        </div>
+        <div class="show-tag" data-lang="tr">${formatDateTR(ev.start,ev.end)}</div>
+        <div class="show-tag" data-lang="en">${formatDateEN(ev.start,ev.end)}</div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    list.innerHTML = `
+      <div class="shows-empty" data-lang="tr">Konserler için <a href="https://instagram.com/humankajourney" target="_blank" style="color:var(--gold);">@humankajourney</a>'ı takip edin</div>
+      <div class="shows-empty" data-lang="en">Follow <a href="https://instagram.com/humankajourney" target="_blank" style="color:var(--gold);">@humankajourney</a> for upcoming shows</div>`;
+  }
+}
+
+loadShows();
 
 // Lightbox
 const galleryImages = [
