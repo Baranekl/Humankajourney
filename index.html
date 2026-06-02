@@ -1180,11 +1180,10 @@ function formatDateEN(start, end) {
 async function loadShows() {
   const list = document.getElementById('shows-list');
   try {
-    const icsText = await fetchWithProxy(ICAL_URL);
-    if (!icsText) throw new Error('No data');
-    const events = parseICS(icsText);
+    const res = await fetch('shows.json?v=' + Date.now());
+    const events = await res.json();
     const now = new Date();
-    const upcoming = events.filter(e => e.end >= now);
+    const upcoming = events.filter(e => new Date(e.dateEnd) >= now);
 
     if (upcoming.length === 0) {
       list.innerHTML = `
@@ -1194,22 +1193,29 @@ async function loadShows() {
     }
 
     list.innerHTML = upcoming.map(ev => {
-      const name = ev.summary.replace(/^HUMANKA\s*[—–-]\s*/i, '');
-      const loc = ev.location ? ev.location.split(',')[0] : '';
-      const city = ev.location ? ev.location.split(',').slice(1,3).join(',').trim() : '';
+      const start = new Date(ev.date);
+      const end = new Date(ev.dateEnd);
+      const sameDay = ev.date === ev.dateEnd;
+      const trDate = sameDay
+        ? `${start.getDate()} ${TR_MONTHS[start.getMonth()]} ${start.getFullYear()}`
+        : `${start.getDate()}–${end.getDate()} ${TR_MONTHS[start.getMonth()]} ${start.getFullYear()}`;
+      const enDate = sameDay
+        ? `${EN_MONTHS[start.getMonth()]} ${start.getDate()}, ${start.getFullYear()}`
+        : `${EN_MONTHS[start.getMonth()]} ${start.getDate()}–${end.getDate()}, ${end.getFullYear()}`;
+
       return `
       <div class="show-item">
         <div class="show-date">
-          <div class="day">${ev.start.getDate()}</div>
-          <div class="month" data-lang="tr">${TR_MONTHS[ev.start.getMonth()]} ${ev.start.getFullYear()}</div>
-          <div class="month" data-lang="en">${EN_MONTHS[ev.start.getMonth()]} ${ev.start.getFullYear()}</div>
+          <div class="day">${start.getDate()}</div>
+          <div class="month" data-lang="tr">${TR_MONTHS[start.getMonth()]} ${start.getFullYear()}</div>
+          <div class="month" data-lang="en">${EN_MONTHS[start.getMonth()]} ${start.getFullYear()}</div>
         </div>
         <div class="show-info">
-          <h4>${name}</h4>
-          <p class="venue"><span>📍</span>${loc}${city ? ' · ' + city : ''}</p>
+          <h4>${ev.title}</h4>
+          <p class="venue"><span>📍</span>${ev.venue} · ${ev.city}</p>
         </div>
-        <div class="show-tag" data-lang="tr">${formatDateTR(ev.start,ev.end)}</div>
-        <div class="show-tag" data-lang="en">${formatDateEN(ev.start,ev.end)}</div>
+        <div class="show-tag" data-lang="tr">${trDate}</div>
+        <div class="show-tag" data-lang="en">${enDate}</div>
       </div>`;
     }).join('');
   } catch(e) {
