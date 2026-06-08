@@ -32,14 +32,6 @@
     "type": "Festival"
   },
   {
-    "date": "2026-07-13",
-    "dateEnd": "2026-07-16",
-    "title": "Alaçatı İnzivası",
-    "venue": "Alaçatı",
-    "city": "İzmir, Türkiye",
-    "type": "İnziva"
-  },
-  {
     "date": "2026-08-06",
     "dateEnd": "2026-08-09",
     "title": "Aquart Festival",
@@ -48,8 +40,16 @@
     "type": "Festival"
   },
   {
-    "date": "2026-09-04",
-    "dateEnd": "2026-09-06",
+    "date": "2026-08-13",
+    "dateEnd": "2026-08-17",
+    "title": "Muse Fest",
+    "venue": "Alaçatı",
+    "city": "İzmir, Türkiye",
+    "type": "Festival"
+  },
+  {
+    "date": "2026-08-28",
+    "dateEnd": "2026-08-31",
     "title": "Kut Spirit Festival",
     "venue": "Kut Spirit Festival",
     "city": "Türkiye",
